@@ -1,5 +1,4 @@
 ﻿using FirstModuleProject;
-using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Unity;
 using System.Windows;
@@ -9,20 +8,21 @@ namespace RegionMemberLifeTimeFromAllaev
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : PrismApplication
+    public partial class App : Application
     {
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        Bootstrapper bootstrapper;
+
+        public App()
         {
+
         }
 
-        protected override Window CreateShell()
+        protected override void OnStartup(StartupEventArgs e)
         {
-            return Container.Resolve<MainWindow>();
-        }
+            base.OnStartup(e);
 
-        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
-        {
-            moduleCatalog.AddModule(typeof(FirstModule));
+            bootstrapper = new Bootstrapper();
+            bootstrapper.Run();
         }
     }
 }

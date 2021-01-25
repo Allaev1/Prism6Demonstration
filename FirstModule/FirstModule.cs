@@ -6,29 +6,31 @@ using System.Text;
 using System.Threading.Tasks;
 using Prism.Modularity;
 using FirstModuleProject.Views;
-using Prism.Ioc;
 using Prism.Unity;
+using Microsoft.Practices.Unity;
 
 namespace FirstModuleProject
 {
     public class FirstModule : IModule
     {
         IRegionManager regionManager;
+        IUnityContainer unityContainer;
 
-        public void OnInitialized(IContainerProvider containerProvider)
+        public FirstModule(IRegionManager regionManager,IUnityContainer unityContainer)
         {
-            regionManager = containerProvider.Resolve<IRegionManager>();
-
-            regionManager.RequestNavigate("ContentRegion", "ViewB");
+            this.regionManager = regionManager;
+            this.unityContainer = unityContainer;
         }
 
-        public void RegisterTypes(IContainerRegistry containerRegistry)
+        public void Initialize()
         {
-            containerRegistry.RegisterForNavigation<ViewA>();
-            containerRegistry.RegisterForNavigation<ViewB>();
+            unityContainer.RegisterTypeForNavigation<ViewA>();
+            unityContainer.RegisterTypeForNavigation<ViewB>();
 
-            containerRegistry.RegisterForNavigation<ViewA1>();
-            containerRegistry.RegisterForNavigation<ViewA2>();
+            unityContainer.RegisterTypeForNavigation<ViewA1>();
+            unityContainer.RegisterTypeForNavigation<ViewA2>();
+
+            regionManager.RequestNavigate("ContentRegion", "ViewB");
         }
     }
 }
